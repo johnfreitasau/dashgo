@@ -1,4 +1,4 @@
-import { Flex, Text, Input, Icon } from "@chakra-ui/react";
+import { Flex, Text, Input, Icon, HStack, Box, Avatar } from "@chakra-ui/react";
 import {
   RiSearchLine,
   RiNotificationLine,
@@ -14,8 +14,8 @@ export function Header() {
       h="20"
       mx="auto"
       mt="4"
-      align="center"
       px="6"
+      align="center"
     >
       <Text fontSize="3xl" fontWeight="bold" letterSpacing="tight" w="64">
         dashgo
@@ -47,8 +47,32 @@ export function Header() {
       </Flex>
 
       <Flex align="center" ml="auto">
-        <Icon as={RiNotificationLine} fontSize="20" />
-        <Icon as={RiUserAddLine} fontSize="20" />
+        <HStack
+          spacing="4"
+          mx="8"
+          pr="8"
+          py="1"
+          color="gray=300"
+          borderRightWidth={1}
+          borderColor="gray.700"
+        >
+          <Icon as={RiNotificationLine} fontSize="20" />
+          <Icon as={RiUserAddLine} fontSize="20" />
+        </HStack>
+        <Flex align="center">
+          <Box mr="4" textAlign="right">
+            <Text>John Freitas</Text>
+            <Text color="gray.300" fontSize="small">
+              john.freitasau@gmail.com
+            </Text>
+          </Box>
+
+          <Avatar
+            size="md"
+            name="John Freitas"
+            src="https://github.com/johnfreitasau.png"
+          />
+        </Flex>
       </Flex>
     </Flex>
   );
