@@ -42,14 +42,25 @@ const options = {
       "2021-03-21T00:00:00.000Z",
       "2021-03-22T00:00:00.000Z",
       "2021-03-23T00:00:00.000Z",
+      "2021-03-24T00:00:00.000Z",
+      "2021-03-25T00:00:00.000Z",
     ],
+  },
+  fill: {
+    opacity: 0.3,
+    type: "gradient",
+    gradient: {
+      shade: "dark",
+      opacityFrom: 1,
+      opacityTo: 0.3,
+    },
   },
 };
 
 const series = [
   {
     name: "series1",
-    data: [31, 120, 20, 40, 60, 70, 23, 25],
+    data: [31, 120, 20, 40, 60, 70, 23, 200],
   },
 ];
 
@@ -71,18 +82,14 @@ export default function Dashboard() {
           <Box p="8" bg="gray.800" borderRadius={8}>
             <Text fontSize="lg" mb="4">
               Week's subscribers
-              <Chart
-                options={options}
-                series={series}
-                type="area"
-                height={160}
-              />
             </Text>
+            <Chart options={options} series={series} type="area" height={160} />
           </Box>
           <Box p="8" bg="gray.800" borderRadius={8}>
             <Text fontSize="lg" mb="4">
               Opening tax
             </Text>
+            <Chart options={options} series={series} type="area" height={160} />
           </Box>
         </SimpleGrid>
       </Flex>
