@@ -1,10 +1,12 @@
-import { Flex, HStack } from "@chakra-ui/react";
+import { Flex, HStack, useBreakpointValue } from "@chakra-ui/react";
 import { Profile } from "./Profile";
 import { NotificationsNav } from "./NotificationsNav";
 import { Logo } from "./Logo";
 import { SearchBox } from "./SearchBox";
 
 export function Header() {
+  const isWideVersion = useBreakpointValue({ base: false, lg: true });
+
   return (
     <Flex
       as="header"
@@ -17,21 +19,11 @@ export function Header() {
       align="center"
     >
       <Logo />
-      <SearchBox />
+      {isWideVersion && <SearchBox />}
 
       <Flex align="center" ml="auto">
-        <HStack
-          spacing="4"
-          mx="8"
-          pr="8"
-          py="1"
-          color="gray=300"
-          borderRightWidth={1}
-          borderColor="gray.700"
-        >
-          <NotificationsNav />
-        </HStack>
-        <Profile />
+        <NotificationsNav />
+        <Profile showProfileData={isWideVersion} />
       </Flex>
     </Flex>
   );
