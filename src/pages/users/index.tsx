@@ -42,7 +42,7 @@ export default function userList() {
               colorScheme="pink"
               leftIcon={<Icon as={RiAddLine} fontSize="20" />}
             >
-              Criar novo
+              Create new
             </Button>
           </Flex>
 
