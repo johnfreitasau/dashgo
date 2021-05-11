@@ -1,16 +1,30 @@
 import { Flex, Button, Stack, FormLabel, FormControl } from "@chakra-ui/react";
 import { Input } from "../components/Form/Input";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 type FormData = {
   email: string;
   password: string;
 };
 
+const signInFormschema = yup.object().shape({
+  email: yup.string().email().required(),
+  password: yup
+    .string()
+    .required()
+    .min(4, "Password is too short - should be 8 chars minimum."),
+});
+
 export default function SignIn() {
-  const { register, handleSubmit, formState } = useForm<FormData>();
+  const { register, handleSubmit, formState } = useForm<FormData>({
+    resolver: yupResolver(signInFormschema),
+  });
 
   const { errors } = formState;
+
+  console.log(errors);
 
   function handleSignIn(values) {
     console.log(values);
@@ -33,12 +47,14 @@ export default function SignIn() {
             name="email"
             type="email"
             label="Email"
-            {...register("email", { required: "Email is required." })}
+            error={errors.email}
+            {...register("email")}
           />
           <Input
             name="password"
             type="password"
             label="Password"
+            error={errors.password}
             {...register("password")}
           />
         </Stack>
