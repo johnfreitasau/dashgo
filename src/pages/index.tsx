@@ -24,8 +24,6 @@ export default function SignIn() {
 
   const { errors } = formState;
 
-  console.log(errors);
-
   function handleSignIn(values) {
     console.log(values);
   }
