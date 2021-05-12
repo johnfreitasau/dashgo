@@ -24,9 +24,11 @@ export default function SignIn() {
 
   const { errors } = formState;
 
-  function handleSignIn(values) {
+  const handleSignIn = async (values) => {
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
     console.log(values);
-  }
+  };
 
   return (
     <Flex w="100vw" h="100vh" align="center" justify="center">
@@ -56,7 +58,13 @@ export default function SignIn() {
             {...register("password")}
           />
         </Stack>
-        <Button type="submit" mt="6" colorScheme="pink" size="lg">
+        <Button
+          type="submit"
+          mt="6"
+          colorScheme="pink"
+          size="lg"
+          isLoading={formState.isSubmitting}
+        >
           Enter
         </Button>
       </Flex>
