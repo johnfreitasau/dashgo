@@ -19,9 +19,16 @@ import { RiAddLine, RiPencilFill } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/SideBar";
 import { Pagination } from "../../components/Pagination";
+import { useEffect } from "react";
 
 export default function userList() {
   const isWideVersion = useBreakpointValue({ base: false, md: true });
+
+  useEffect(() => {
+    fetch("http://localhost:3000/api/users")
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  }, []);
 
   return (
     <Box>

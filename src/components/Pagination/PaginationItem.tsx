@@ -32,7 +32,7 @@ export function PaginationItem({
       size="sm"
       fontSize="xs"
       width="4"
-      colorScheme="gray.700"
+      // colorScheme="gray.700"
       _hover={{
         bg: "gray.500",
       }}
