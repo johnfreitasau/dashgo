@@ -31,7 +31,7 @@ interface User {
 }
 
 export default function userList() {
-  const { data, isLoading, error } = useQuery(
+  const { data, isLoading, isFetching, error } = useQuery(
     "users",
     async () => {
       const response = await fetch("http://localhost:3000/api/users");
@@ -75,6 +75,9 @@ export default function userList() {
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Users
+              {isFetching && !isLoading && (
+                <Spinner size="sm" color="gray.500" ml="4" />
+              )}
             </Heading>
 
             <Link href="/users/create" passHref>
