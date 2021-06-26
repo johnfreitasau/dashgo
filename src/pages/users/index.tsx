@@ -22,6 +22,7 @@ import { Sidebar } from "../../components/SideBar";
 import { Pagination } from "../../components/Pagination";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
+import { api } from "../../services/api";
 
 interface User {
   id: string;
@@ -34,9 +35,7 @@ export default function userList() {
   const { data, isLoading, isFetching, error } = useQuery(
     "users",
     async () => {
-      const response = await fetch("http://localhost:3000/api/users");
-
-      const data = await response.json();
+      const { data } = await api.get("users");
 
       const users: Array<User> = data.users.map((user: User) => {
         return {
