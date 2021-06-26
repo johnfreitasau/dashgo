@@ -20,11 +20,15 @@ import { RiAddLine, RiPencilFill } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/SideBar";
 import { Pagination } from "../../components/Pagination";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useUsers } from "../../services/hooks/useUsers";
 
 export default function userList() {
-  const { data, isLoading, isFetching, error } = useUsers();
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isFetching, error } = useUsers(page);
+
+  console.log("PAGE:", page);
 
   console.log("QUERY:", data);
 
@@ -83,7 +87,7 @@ export default function userList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((user) => (
+                  {data.users.map((user) => (
                     <Tr key={user.id}>
                       <Td px={["4", "4", "6"]}>
                         <Checkbox colorScheme="pink" />
@@ -114,7 +118,11 @@ export default function userList() {
                   ))}
                 </Tbody>
               </Table>
-              <Pagination />
+              <Pagination
+                totalCountOfRegisters={200}
+                currentPage={page}
+                onPageChange={setPage}
+              />
             </>
           )}
         </Box>
