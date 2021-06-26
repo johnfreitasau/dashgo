@@ -31,26 +31,32 @@ interface User {
 }
 
 export default function userList() {
-  const { data, isLoading, error } = useQuery("users", async () => {
-    const response = await fetch("http://localhost:3000/api/users");
+  const { data, isLoading, error } = useQuery(
+    "users",
+    async () => {
+      const response = await fetch("http://localhost:3000/api/users");
 
-    const data = await response.json();
+      const data = await response.json();
 
-    const users: Array<User> = data.users.map((user: User) => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: new Date(user.createdAt).toLocaleDateString("en-AU", {
-          day: "2-digit",
-          month: "long",
-          year: "numeric",
-        }),
-      };
-    });
+      const users: Array<User> = data.users.map((user: User) => {
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          createdAt: new Date(user.createdAt).toLocaleDateString("en-AU", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          }),
+        };
+      });
 
-    return users;
-  });
+      return users;
+    },
+    {
+      staleTime: 1000 * 5, //5 secs
+    }
+  );
 
   console.log("QUERY:", data);
 
