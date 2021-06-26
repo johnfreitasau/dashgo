@@ -23,13 +23,33 @@ import { Pagination } from "../../components/Pagination";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+}
+
 export default function userList() {
   const { data, isLoading, error } = useQuery("users", async () => {
     const response = await fetch("http://localhost:3000/api/users");
 
-    const data = response.json();
+    const data = await response.json();
 
-    return data;
+    const users: Array<User> = data.users.map((user: User) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        createdAt: new Date(user.createdAt).toLocaleDateString("en-AU", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        }),
+      };
+    });
+
+    return users;
   });
 
   console.log("QUERY:", data);
@@ -86,87 +106,35 @@ export default function userList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr>
-                    <Td px={["4", "4", "6"]}>
-                      <Checkbox colorScheme="pink" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">John Freitas</Text>
-                        <Text fontSize="small" color="gray.300">
-                          john.freitasau@gmail.com
-                        </Text>
-                      </Box>
-                    </Td>
-                    {isWideVersion && <Td>04 of April, 2021</Td>}
-                    <Td>
-                      {isWideVersion && (
-                        <Button
-                          as="a"
-                          size="sm"
-                          fontSize="sm"
-                          colorScheme="purple"
-                          leftIcon={<Icon as={RiPencilFill} />}
-                        >
-                          Edit
-                        </Button>
-                      )}
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td px={["4", "4", "6"]}>
-                      <Checkbox colorScheme="pink" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">John Freitas</Text>
-                        <Text fontSize="small" color="gray.300">
-                          john.freitasau@gmail.com
-                        </Text>
-                      </Box>
-                    </Td>
-                    {isWideVersion && <Td>04 of April, 2021</Td>}
-                    <Td>
-                      {isWideVersion && (
-                        <Button
-                          as="a"
-                          size="sm"
-                          fontSize="sm"
-                          colorScheme="purple"
-                          leftIcon={<Icon as={RiPencilFill} />}
-                        >
-                          Edit{" "}
-                        </Button>
-                      )}
-                    </Td>
-                  </Tr>
-                  <Tr>
-                    <Td px="6">
-                      <Checkbox colorScheme="pink" />
-                    </Td>
-                    <Td>
-                      <Box>
-                        <Text fontWeight="bold">John Freitas</Text>
-                        <Text fontSize="small" color="gray.300">
-                          john.freitasau@gmail.com
-                        </Text>
-                      </Box>
-                    </Td>
-                    {isWideVersion && <Td>04 of April, 2021</Td>}
-                    <Td>
-                      {isWideVersion && (
-                        <Button
-                          as="a"
-                          size="sm"
-                          fontSize="sm"
-                          colorScheme="purple"
-                          leftIcon={<Icon as={RiPencilFill} />}
-                        >
-                          Edit{" "}
-                        </Button>
-                      )}
-                    </Td>
-                  </Tr>
+                  {data.map((user) => (
+                    <Tr key={user.id}>
+                      <Td px={["4", "4", "6"]}>
+                        <Checkbox colorScheme="pink" />
+                      </Td>
+                      <Td>
+                        <Box>
+                          <Text fontWeight="bold">{user.name}</Text>
+                          <Text fontSize="small" color="gray.300">
+                            {user.email}
+                          </Text>
+                        </Box>
+                      </Td>
+                      {isWideVersion && <Td>{user.createdAt}</Td>}
+                      <Td>
+                        {isWideVersion && (
+                          <Button
+                            as="a"
+                            size="sm"
+                            fontSize="sm"
+                            colorScheme="purple"
+                            leftIcon={<Icon as={RiPencilFill} />}
+                          >
+                            Edit
+                          </Button>
+                        )}
+                      </Td>
+                    </Tr>
+                  ))}
                 </Tbody>
               </Table>
               <Pagination />
