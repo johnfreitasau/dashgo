@@ -21,41 +21,10 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/SideBar";
 import { Pagination } from "../../components/Pagination";
 import { useEffect } from "react";
-import { useQuery } from "react-query";
-import { api } from "../../services/api";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-}
+import { useUsers } from "../../services/hooks/useUsers";
 
 export default function userList() {
-  const { data, isLoading, isFetching, error } = useQuery(
-    "users",
-    async () => {
-      const { data } = await api.get("users");
-
-      const users: Array<User> = data.users.map((user: User) => {
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          createdAt: new Date(user.createdAt).toLocaleDateString("en-AU", {
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-          }),
-        };
-      });
-
-      return users;
-    },
-    {
-      staleTime: 1000 * 5, //5 secs
-    }
-  );
+  const { data, isLoading, isFetching, error } = useUsers();
 
   console.log("QUERY:", data);
 
