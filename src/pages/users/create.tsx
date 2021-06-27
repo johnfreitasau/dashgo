@@ -9,12 +9,19 @@ import {
   Button,
 } from "@chakra-ui/react";
 import Link from "next/link";
+import { useMutation } from "react-query";
+
 import { Header } from "../../components/Header";
 import { Input } from "../../components/Form/Input";
 import { Sidebar } from "../../components/SideBar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Mutation } from "react-query/types/core/mutation";
+import { api } from "../../services/api";
+import { create } from "yup/lib/array";
+import { queryClient } from "../../services/react-query/queryClient";
+import { useRouter } from "next/router";
 
 type CreateUserFormData = {
   name: string;
@@ -41,6 +48,28 @@ const createUserSchema = yup.object().shape({
 });
 
 export default function createUser() {
+  const router = useRouter();
+
+  const createUser = useMutation(
+    async (user: CreateUserFormData) => {
+      const response = await api.post("users", {
+        user: {
+          ...user,
+          create_at: new Date(),
+        },
+      });
+
+      return response.data.user;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("users");
+
+        router.push("/users");
+      },
+    }
+  );
+
   const { register, handleSubmit, formState } = useForm<CreateUserFormData>({
     resolver: yupResolver(createUserSchema),
   });
@@ -50,9 +79,7 @@ export default function createUser() {
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async (
     values
   ) => {
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    console.log(values);
+    await createUser.mutateAsync(values);
   };
 
   return (
