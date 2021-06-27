@@ -14,14 +14,18 @@ import {
   Text,
   useBreakpointValue,
   Spinner,
+  Link,
 } from "@chakra-ui/react";
-import Link from "next/link";
+import NextLink from "next/link";
 import { RiAddLine, RiPencilFill } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/SideBar";
 import { Pagination } from "../../components/Pagination";
 import { useEffect, useState } from "react";
 import { useUsers } from "../../services/hooks/useUsers";
+import { QueryClient } from "react-query";
+import { queryClient } from "../../services/react-query/queryClient";
+import { api } from "../../services/api";
 
 export default function userList() {
   const [page, setPage] = useState(1);
@@ -34,12 +38,25 @@ export default function userList() {
 
   const isWideVersion = useBreakpointValue({ base: false, md: true });
 
-  useEffect(() => {}, []);
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(
+      ["user", userId],
+      async () => {
+        const response = await api.get(`users/${userId}`);
+
+        console.log("USER:", response.data);
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 10, //10 mins
+      }
+    );
+  }
 
   return (
     <Box>
+      ``
       <Header />
-
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
@@ -52,7 +69,7 @@ export default function userList() {
               )}
             </Heading>
 
-            <Link href="/users/create" passHref>
+            <NextLink href="/users/create" passHref>
               <Button
                 as="a"
                 size="sm"
@@ -62,7 +79,7 @@ export default function userList() {
               >
                 Create new
               </Button>
-            </Link>
+            </NextLink>
           </Flex>
 
           {isLoading ? (
@@ -94,7 +111,11 @@ export default function userList() {
                       </Td>
                       <Td>
                         <Box>
-                          <Text fontWeight="bold">{user.name}</Text>
+                          <Link
+                            onMouseEnter={() => handlePrefetchUser(user.id)}
+                          >
+                            <Text fontWeight="bold">{user.name}</Text>
+                          </Link>
                           <Text fontSize="small" color="gray.300">
                             {user.email}
                           </Text>
@@ -119,7 +140,7 @@ export default function userList() {
                 </Tbody>
               </Table>
               <Pagination
-                totalCountOfRegisters={200}
+                totalCountOfRegisters={data.totalCount}
                 currentPage={page}
                 onPageChange={setPage}
               />
