@@ -22,19 +22,20 @@ import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/SideBar";
 import { Pagination } from "../../components/Pagination";
 import { useEffect, useState } from "react";
-import { useUsers } from "../../services/hooks/useUsers";
+import { getUsers, useUsers } from "../../services/hooks/useUsers";
 import { QueryClient } from "react-query";
 import { queryClient } from "../../services/react-query/queryClient";
 import { api } from "../../services/api";
+import { GetServerSideProps } from "next";
 
 export default function userList() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isFetching, error } = useUsers(page);
 
-  console.log("PAGE:", page);
-
-  console.log("QUERY:", data);
+  // const { data, isLoading, isFetching, error } = useUsers(page, {
+  //   initialData: users,
+  // });
 
   const isWideVersion = useBreakpointValue({ base: false, md: true });
 
@@ -151,3 +152,16 @@ export default function userList() {
     </Box>
   );
 }
+
+//React Query with SSR - not supported on MirageJS at present, so I have commented it.
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const {users, totalCount} = await getUsers(1);
+
+//   return {
+//     props: {
+//       users,
+//       totalCount
+//     },
+//   };
+// };
